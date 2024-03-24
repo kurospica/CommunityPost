@@ -6,7 +6,7 @@
 
 - ポートフォリオサイト
 - リンク
-  - [portfolio](https://kurospica.link/)
+  - [portfoliosite](https://kurospica.link/)
 
 ## ローカル開発
 
