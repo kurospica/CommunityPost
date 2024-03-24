@@ -1,12 +1,12 @@
-# kamimi-portfolio
+# portfolio
 
 ![PC用ポートフォリオ](../../assets/portfolio_web.png "portfolio_web")
 
 ## このサイトについて
 
-- Kamimi のポートフォリオサイト
+- ポートフォリオサイト
 - リンク
-  - [kamimi-portfolio](https://kamimiportfolioproject.web.app)
+  - [kamimi-portfolio](https://kurospica.link/)
 
 ## ローカル開発
 
