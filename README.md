@@ -6,85 +6,74 @@
 
 ## ローカル開発
 
-### 前提条件
+### 開発経緯
 
-- `firebase-tools`の npm モジュールがインストールされていること
-- `firebase login`を実行して、ログインしていること
-  - 長期間ログイン状態の場合、次回以降にデプロイなどの操作をしようとするとエラーになるため、`firebase logout`後に再度`firebase login`を行う必要がある
-  - 参考
-    - [Firebase は長期間ログアウトしていないアカウントだとエラーが返る](https://iwb.jp/firebase-account-returns-error-not-login-long-time/)
+- 職業訓練の卒業発表として制作しました。
+- 初めてのグループ開発ということもあり貴重な経験ができましたが課題もたくさん残りました。
+  - 制作物は自分の関与したもののみの公開です。 
+  
 
 ### 各種コマンド
 
-- デプロイする
-
-  - `firebase deploy`
-
-- Firebase プロジェクトをローカルで実行してテストする
-
-  - `firebase serve --only hosting`
-
-- 参考
-  - [Firebase CLI リファレンス](https://firebase.google.com/docs/cli?hl=ja#macos)
-
 ## 実装完了までの手順
 
-1. デザイン検討 (実工数：約 3 時間)
+1. デザイン検討　コンテンツ企画 (約 3 時間)
 
-- 下記を参考に検討
-  - デザイン入門教室(書籍)
-  - Pinterest に掲載されているデザイン
-  - 実際のエンジニア・デザイナーのポートフォリオ
-  - 配色は下記から選択
-    - 参考：https://www.canva.com/ja_jp/learn/100-color-combinations/
+- ２～３週間は思いついたことなどをノートにまとめていた
+- その中から実現できそう、拡張性のありそうなものをピックアップ
 
-2. コンテンツ検討 (実工数：約 1 時間)
+2. 制作 (約 10日間)
 
 - 下記を参考に検討
   - 「エンジニア ポートフォリオ」で Goolge 検索して出てきた転職サイト
   - 実際のエンジニア・デザイナーのポートフォリオ
 - 画像などの素材
-  - 自分で撮った写真
-  - [AI 画伯](https://ai-art.tokyo/)で作成した画像(ツール使わせていただきました!ありがとうございます)
+  - 生成AI、フリー素材（利用規約に則り）
 
-3. モックアップ作成 (実工数：約 4 時間)
+3. サーバー構築・デプロイ (約 3週間)
 
-- pptx で作成
+- クラウドサービスに興味があり、話題のAWSに目を付けた。
+　- 実はサービス開始して5年以上経過していることに驚いた。
+- 全く知識がないところから始めたためかなりの時間を要した。   
+  
 
-3. コーディング (実工数：約 17 時間)
+3. コーディング (約 3 日間)
 
-4. Web サイトを公開 (実工数：約 2 時間)
+4. Web サイトを公開 
 
-- Firebase で公開
-  - 参考：https://dotinstall.com/lessons/hosting_firebase
+- 
 
 ## 工夫したこと
 
-- グローバルメニュを固定配置し、どのページにいてもすぐ別のコンテンツをみることができる
+- グローバルメニューを固定配置し、どのページにいてもすぐ別のコンテンツをみることができる
 - レスポンシブ対応を行った
-- コンテンツごとの切り口に svg を用いて波線にした
-  - 参考：http://tympanus.net/codrops/2013/10/03/a-collection-of-separator-styles/
-- PC では、プロダクトのスクリーンショットの上にカーソルを当てると、別コンポーネントが現れる
-  - 参考：https://blog.raizzenet.com/mouse-hover-caption-effects-in-css/
-- コンタクトのメールアイコンを押下すると、メールアドレスをクリップボードにコピーすることができる
-- メールアドレスをコピーすると、ツールチップを表示する
-  - 参考：https://www.jungleocean.com/programming/190308tooltip-css
+- コンテンツごとの切り口で色の変更
+- 動きをつけて単調さをなくすようにした
+- テキストと画像を格納するテーブルは一緒にしたほうが良いけれど、勉強のためにあえて2つのテーブルにわけてSQLを書いた
+- 
 
-## 使用
+
+## 開発環境
 
 ### 言語
 
 - HTML
 - CSS
-- JavaScript
+- Java
+- SQL
 
-### ライブラリ・フレームワーク
+### ライブラリ
 
-- Bootstrap
-- jQuery
-- Fontawesome
-- Firebase
+- commons-fileupload-1.5
+- commons-io-2.8.0
+- h2-2.2.224
+- jsoup-1.17.2
+- jstl-api-1.2
+- jstl-impl-1.2
 
 ### ツール
 
-- Visual Studio Code
+- Eclipse
+- AWS/Lightseil/Linux
+- wordpress
+- ApacheTomcat
