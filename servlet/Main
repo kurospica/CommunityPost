@@ -1,0 +1,133 @@
+package servlet;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import javax.servlet.http.Part;
+
+import dao.PostListDAO;
+import model.AccountBeans;
+import model.FileDataList;
+import model.GetReplyBO;
+import model.MutterBO;
+import model.Reply;
+
+
+@WebServlet(name = "Main", urlPatterns = { "/Main" })
+@MultipartConfig(maxFileSize = 104857600)
+public class Main extends HttpServlet {
+  //private static final long serialVersionUID = 1L;
+
+  protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+    // ログインしているか確認するため
+    // セッションスコープからユーザー情報を取得
+	  HttpSession session = request.getSession();
+	  AccountBeans account = (AccountBeans) session.getAttribute("account");;
+    
+
+	  // ログインチェック
+    if (account == null) {
+        // ログインしていない場合、リダイレクト
+        response.sendRedirect("index.jsp");
+    } else {
+        // ログイン済みの場合
+    	// DAOからデータを取得
+    	PostListDAO dao = new PostListDAO();
+        List<FileDataList> dataList = dao.getDataFromMultipleTables();
+        
+        GetReplyBO getreplydao = new GetReplyBO();
+        List<Reply> replyList = getreplydao.execute();
+        request.setAttribute("replyList", replyList);
+        
+        // 取得したデータをJSPに送信
+        request.setAttribute("dataList", dataList);
+
+        // フォワードしてメインページを表示
+        RequestDispatcher dispatcher = request.getRequestDispatcher("WEB-INF/jsp/main.jsp");
+        dispatcher.forward(request, response);
+    }
+  }
+  
+  
+  protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    // リクエストパラメータの取得
+    request.setCharacterEncoding("UTF-8");
+    String text = request.getParameter("text");
+
+    // セッションスコープに保存されたユーザー情報を取得
+    HttpSession session = request.getSession();
+    AccountBeans account = (AccountBeans) session.getAttribute("account");
+
+    
+    //ここからファイル処理
+
+    List<String> images = new ArrayList<String>();
+    //統合されたデータベースから取得
+
+    // postされたパラメータの確認
+    String name = request.getParameter("name");
+    //String file1 = request.getParameter("file1");
+   
+
+    MutterBO mutterBO = new MutterBO();
+    
+    for (Part part : request.getParts()) {
+        if (part.getName().equals("file1")) {
+            InputStream fileContent = part.getInputStream();
+            String contentType = part.getContentType();
+
+            if (text != null && !text.isEmpty() && part.getSize() > 0) {
+                // テキストと画像両方の投稿
+                boolean success = mutterBO.postTextAndImage(account.getName(), text, fileContent, contentType);
+                if (!success) {
+                    response.sendRedirect("error.jsp");
+                    return;
+                }
+            } else if (text != null && !text.isEmpty()) {
+                // テキストのみ
+                boolean success = mutterBO.postText(account.getName(), text);
+                if (!success) {
+                    response.sendRedirect("error.jsp");
+                    return;
+                }
+            } else if (part.getSize() > 0 && text.isEmpty()) {
+                // 画像のみ投稿
+                boolean success = mutterBO.postImage(account.getName(), fileContent, contentType);
+                if (!success) {
+                    response.sendRedirect("error.jsp");
+                    return;
+                }
+            } else {
+                response.sendRedirect("error.jsp");
+                return;
+            }
+            
+            PostListDAO dao = new PostListDAO();
+            List<FileDataList> dataList = dao.getDataFromMultipleTables();
+            request.setAttribute("dataList", dataList);
+            // フォワードしてメインページを表示
+            RequestDispatcher dispatcher = request.getRequestDispatcher("WEB-INF/jsp/main.jsp");
+            dispatcher.forward(request, response);
+        }
+ 
+
+
+    // 結果表示用jspに渡す値をリクエスト属性に設定
+    request.setAttribute("name", name);
+    request.setAttribute("list", images);
+    request.setAttribute("account", account);
+
+}
+}
+}
