@@ -1,0 +1,60 @@
+package dao;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
+
+import model.Reply; // リプライのモデルクラス
+
+public class ReplyDAO {
+    private final static String JDBC_URL = "jdbc:h2:./database/MutterDatabase";
+    private final static String DB_USER = "sa";
+    private final static String DB_PASS = "";
+
+    // リプライをデータベースに挿入するメソッド
+    public boolean insertReply(Reply reply) {
+        try (Connection conn = DriverManager.getConnection(JDBC_URL, DB_USER, DB_PASS);
+             PreparedStatement pstmt = conn.prepareStatement("INSERT INTO REPLIES (reply_id, reply_name, text, posted_at) VALUES (?, ?, ?, ?)")) {
+
+            pstmt.setInt(1, reply.getParentMutterId());
+            pstmt.setString(2, reply.getReplyName());
+            pstmt.setString(3, reply.getText());
+            pstmt.setTimestamp(4, new Timestamp(System.currentTimeMillis()));
+
+            int affectedRows = pstmt.executeUpdate();
+            return affectedRows > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    // 特定のつぶやき（親つぶやき）に対するリプライを取得するメソッド
+    public List<Reply> getRepliesByParentMutterId(int parentMutterId) {
+        List<Reply> replies = new ArrayList<>();
+        try (Connection conn = DriverManager.getConnection(JDBC_URL, DB_USER, DB_PASS);
+             PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM REPLIES WHERE reply_id = ? ORDER BY posted_at DESC")) {
+
+            pstmt.setInt(1, parentMutterId);
+            ResultSet rs = pstmt.executeQuery();
+
+            while (rs.next()) {
+                Reply reply = new Reply();
+                reply.setId(rs.getInt("id"));
+                reply.setParentMutterId(parentMutterId);
+                reply.setReplyName(rs.getString("reply_name"));
+                reply.setText(rs.getString("text"));
+                reply.setPostedAt(rs.getTimestamp("posted_at"));
+                replies.add(reply);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return replies;
+    }
+}
