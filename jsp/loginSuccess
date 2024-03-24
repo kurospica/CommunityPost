@@ -1,0 +1,20 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<link rel="stylesheet" href="login_style.css">
+	<title>ログイン成功</title>
+	<meta http-equiv="refresh" content="2;URL='AccountCheck">
+</head>
+<body>
+	<form name="login_form">
+      <div class="login_form_top">
+        <h1><img src="images/login_logo.png" alt="推し活応援"></h1>
+        <p>おかえりなさい！！</p>
+        <p>楽しんでください</p></div>
+      <div class="login_form_btm"></div>
+    </form>
+</body>
+</html>
