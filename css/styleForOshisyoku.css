@@ -1,0 +1,147 @@
+@charset "UTF-8";
+
+body{
+	margin: 0 400px 0 400px ;
+	background-color: #99CCFF;
+	background-image: url('images/raisu.png');
+	background-size:20%;
+}
+.search-container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-bottom: 20px; /* 適宜調整 */
+    /*float: left;*/
+}
+
+#main{
+    order: 1; /* 検索フォームを先頭に配置 */
+   /* margin-bottom: 10px; /*10px 適宜調整 */
+    margin: 15px 15px 10px 10px;
+    background-image: url('images/ｃ.png');
+    background-color:wheat;
+    width: 500px;
+    height: 500px;
+    float: right;
+    
+}
+
+/*リンク先*/	
+#sub {
+    order: 2; /* 検索結果を次に配置 */
+    /*size:100px;*/
+    /*background-color: #00FF99;*/
+    margin: 0 -350px 0 -150px;/*margin: 0 -350px 0 -150px;*/
+    /*list-style-type: none;*/
+    float:left;
+    overflow: hidden;
+}
+
+
+#url{
+	/*overflow: hidden;*/
+	list-style-type: none;
+	padding:0;
+	/*height:0;*/
+	/*margin:0 0 0 0;*/
+	float:left;
+	text-decoration: none;
+}
+
+#url1{
+	/*float: left;*/
+	margin:0 0 0 -300px;
+	overflow: hidden;
+	display: block;
+	padding-top:44px;
+	height: 0;
+	/*background-image: url(images/a.png);*/
+	/*background-size:5%;*/
+	/*width: 210px;*/
+    /*height: 50px;*/
+}
+#url1 a{
+	background-image: url(images/a.png);
+}
+
+/*url先のボタン編集*/
+.button {
+			float:left;
+			/*width:110px;*/
+            display: block;
+            background-color: #00FF99;
+            border: none;
+            color: white;
+            padding: 15px 32px;
+            text-align: center;
+            text-decoration: none;
+            font-size: 16px;
+            margin: 10px;
+            cursor: pointer;
+            border-radius: 10px;
+        }
+        /* ボタンのホバー時のスタイル */
+        .button:hover {
+            background-color: #45a049;
+        }
+
+/*h1(おし食のところ)*/
+.osishoku{
+	background-color:#00FF99;
+	color:#FFFFFF;
+	background-image: url('images/d.png'),url('images/e.png'),url('images/f.png');
+	background-position:left,center,right;/*繰り返しした画像の位置を指定*/
+	background-repeat: no-repeat;/*画像の繰り返しを中止*/
+	background-size: contain;/*画像を背景に合わせる*/
+	margin:5px 15px 0 10px;
+	text-align: center;
+	line-height:120px;
+	width: 500px;
+    height: 100px;
+}
+
+/*ジャンル*/
+#zya{
+	font-size: 25px;
+	font-weight:bold;
+	text-align: center;
+	padding: 60px 70px 20px 30px;
+}
+
+/*日時*/
+#hi{
+	font-size: 25px;
+	font-weight:bold;
+	text-align: center;
+	padding: 15px 70px 20px 30px;
+}
+
+/*場所*/
+#ba{
+	font-size: 25px;
+	font-weight:bold;
+	text-align: center;
+	padding: 15px 70px 20px 30px;
+}
+
+/*人数*/
+#ni{
+	font-size: 25px;
+	font-weight:bold;
+	text-align: center;
+	padding: 15px 70px 10px 30px;
+	
+}
+
+/*入力ボタンの編集*/
+.botan{
+	width: 250px;
+    height: 30px;
+}
+/*Searchボタン*/
+#search{
+	width: 60px;
+    height: 30px;
+    /*できなかったtext-align:center;*/
+    margin:5px 0 10px 50px;
+}
