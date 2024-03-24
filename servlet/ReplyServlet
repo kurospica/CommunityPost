@@ -1,0 +1,96 @@
+package servlet;
+
+import java.io.IOException;
+import java.util.List;
+
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import dao.PostListDAO;
+import model.AccountBeans;
+import model.FileDataList;
+import model.GetReplyBO;
+import model.PostReplyBO;
+import model.Reply;
+
+/**
+ * Servlet implementation class ReplyServlet
+ */
+@WebServlet(name = "ReplyServlet", urlPatterns = { "/ReplyServlet" })
+@MultipartConfig(maxFileSize = 104857600)
+public class ReplyServlet extends HttpServlet {
+  //private static final long serialVersionUID = 1L;
+
+  protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	  request.setCharacterEncoding("UTF-8");
+    HttpSession session = request.getSession();
+    AccountBeans account = (AccountBeans) session.getAttribute("account");
+    
+
+ // ログインチェック
+    if (account == null) {
+        // ログインしていない場合、リダイレクト
+        response.sendRedirect("index.jsp");
+    } else {
+        // ログイン済みの場合
+    	// DAOからデータを取得
+    	PostListDAO dao = new PostListDAO();
+        List<FileDataList> dataList = dao.getDataFromMultipleTables();
+        
+        GetReplyBO getreplydao = new GetReplyBO();
+        List<Reply> replyList = getreplydao.execute();
+        request.setAttribute("replyList", replyList);
+
+
+        // 取得したデータをJSPに送信
+        request.setAttribute("dataList", dataList);
+        //System.out.println("Main " + dataList);
+
+        // フォワードしてメインページを表示
+        RequestDispatcher dispatcher = request.getRequestDispatcher("WEB-INF/jsp/main.jsp");
+        dispatcher.forward(request, response);
+    }
+  }
+
+	/**
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 */
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		request.setCharacterEncoding("UTF-8");
+		
+		HttpSession session = request.getSession();
+		AccountBeans account = (AccountBeans) session.getAttribute("account");
+	    
+		String replyText = request.getParameter("replyText");
+	    int parentId = Integer.parseInt(request.getParameter("mutterId")); // 親つぶやきのIDを取得
+
+	    // 新しいリプライオブジェクトを作成
+	    Reply reply = new Reply();
+	    reply.setParentMutterId(parentId);
+	    reply.setReplyName(account.getName()); // リプライ投稿者の名前をセットする
+	    reply.setText(replyText); // リプライのテキストをセットする
+
+	    PostReplyBO postReply = new PostReplyBO();
+	    List<Reply> replyList = postReply.execute(reply); // リプライをデータベースに追加し、リプライのリストを取得する
+
+	    // リプライのリストをリクエスト属性に設定
+	    request.setAttribute("replyList", replyList);
+	
+	
+	PostListDAO dao = new PostListDAO();
+    List<FileDataList> dataList = dao.getDataFromMultipleTables();
+    request.setAttribute("dataList", dataList);
+    
+    // フォワードしてメインページを表示
+    RequestDispatcher dispatcher = request.getRequestDispatcher("WEB-INF/jsp/main.jsp");
+    dispatcher.forward(request, response);
+
+}
+}
+
