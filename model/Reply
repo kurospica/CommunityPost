@@ -1,0 +1,45 @@
+package model;
+
+import java.sql.Timestamp;
+
+public class Reply {
+    private int id;
+    private int parentId; // 親つぶやきのID
+    private String replyName;
+    private String text;
+    private Timestamp postedAt;
+    
+    
+	public int getId() {
+		return id;
+	}
+	public void setId(int id) {
+		this.id = id;
+	}
+	public int getParentMutterId() {
+		return parentId;
+	}
+	public void setParentMutterId(int parentId) {
+		this.parentId = parentId;
+	}
+	public String getText() {
+		return text;
+	}
+	public void setText(String text) {
+		this.text = text;
+	}
+	public Timestamp getPostedAt() {
+		return postedAt;
+	}
+	public void setPostedAt(Timestamp postedAt) {
+		this.postedAt = postedAt;
+	}
+	public String getReplyName() {
+		return replyName;
+	}
+	public void setReplyName(String replyName) {
+		this.replyName = replyName;
+	}
+
+    // コンストラクタ、ゲッター、セッターなど必要なメソッドを追加
+}
