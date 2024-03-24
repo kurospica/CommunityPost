@@ -1,0 +1,99 @@
+package dao;
+
+import java.sql.Blob;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.Base64;
+import java.util.List;
+
+import model.Image;
+
+public class ImageDAO {
+  // データベース接続に使用する情報
+  private final static String JDBC_URL = "jdbc:h2:./database/MutterDatabase";
+  private final static String DB_USER = "sa";
+  private final static String DB_PASS = "";
+  private final static String INSERT_IMAGE_SQL = "INSERT INTO FILEPATHS (mutter_id, content, content_type, name) VALUES (?, ?, ?, ?)";
+
+  public List<Image> findAll() {//画像をデータベースから呼び出す
+    List<Image> imageList = new ArrayList<Image>();
+    // JDBCドライバを読み込む
+    try {
+        Class.forName("org.h2.Driver");
+    } catch (ClassNotFoundException e) {
+        throw new IllegalStateException("JDBCドライバを読み込めませんでした");
+    }
+    // データベース接続
+    try (Connection conn = DriverManager.getConnection(JDBC_URL, DB_USER, DB_PASS)) {
+        // SELECT文の準備
+        String sql = "SELECT ID, FILENAME, CONTENT, CONTENT_TYPE FROM FILEPATHS ORDER BY ID DESC";
+        try (Statement statement = conn.createStatement();
+             ResultSet rs = statement.executeQuery(sql)) {
+
+            // SELECT文の結果をArrayListに格納
+            while (rs.next()) {
+                int id = rs.getInt("ID");
+                String fname = rs.getString("FILENAME");
+                Blob fpath = rs.getBlob("CONTENT");
+                String contentType = rs.getString("CONTENT_TYPE");
+             // バイト配列に画像データを変換
+                byte[] imageData = fpath.getBytes(1, (int) fpath.length());
+                String base64Encoded = Base64.getEncoder().encodeToString(imageData);
+                Image image = new Image(id, fname, base64Encoded,contentType);
+                imageList.add(image);
+                //System.out.println(imageData);
+               // System.out.println(base64Encoded);
+            }
+        }
+    } catch (SQLException e) {
+        e.printStackTrace();
+        return null;
+    }
+    return imageList;
+}
+  
+ 
+//画像とテキストの両方を投稿した場合の処理
+  public boolean uploadImage(Image image) {
+	  
+	  if (image.getFileContent() == null) {
+	        return false; // ファイルコンテンツが null の場合は挿入処理をスキップ
+	    }
+      try (Connection conn = DriverManager.getConnection(JDBC_URL, DB_USER, DB_PASS);
+           PreparedStatement pstmt = conn.prepareStatement(INSERT_IMAGE_SQL)) {
+
+          pstmt.setInt(1, image.getMutterId());
+          pstmt.setBlob(2, image.getFileContent());
+          pstmt.setString(3, image.getContentType());
+          pstmt.setString(4, image.getUserName());
+
+          int affectedRows = pstmt.executeUpdate();
+          return affectedRows > 0;
+      } catch (SQLException e) {
+          e.printStackTrace();
+          return false;
+      }
+  }
+}
+
+/*public static void saveFile(String filename, InputStream fileContent, String contentType) {
+	try (Connection conn = DriverManager.getConnection(JDBC_URL, DB_USER, DB_PASS)) {
+        String sql = "INSERT INTO Files (filename, content, content_type) VALUES (?, ?, ?)";
+	
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, filename);
+            stmt.setBlob(2, fileContent);
+            stmt.setString(3, contentType);
+            stmt.executeUpdate();
+        
+        }
+    } catch (SQLException e) {
+        e.printStackTrace();
+    
+}*/
+
