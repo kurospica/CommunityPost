@@ -1,0 +1,41 @@
+package dao;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+
+public class MuttersDeleteDAO {
+    private Connection connection;
+
+    public MuttersDeleteDAO(Connection connection) {
+        this.connection = connection;
+    }
+
+    public boolean deleteMutter(String MUTTER_ID) {
+        boolean success = false;
+        PreparedStatement statement = null;
+
+        try {
+            String query = "DELETE FROM MUTTERS WHERE MUTTER_ID = ?";
+            statement = connection.prepareStatement(query);
+            statement.setString(1, MUTTER_ID);
+
+            int rowsAffected = statement.executeUpdate();
+            if (rowsAffected > 0) {
+                success = true;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (statement != null) {
+                    statement.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return success;
+    }
+}
