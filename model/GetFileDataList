@@ -1,0 +1,21 @@
+package model;
+
+import java.sql.SQLException;
+import java.util.List;
+
+import dao.PostListDAO;
+
+public class GetFileDataList {
+    private PostListDAO postListDAO;
+
+
+    public GetFileDataList() {
+
+        this.postListDAO = new PostListDAO();
+    }
+
+    public List<FileDataList> execute() throws SQLException {
+        List<FileDataList> fileDataList = postListDAO.getDataFromMultipleTables();
+        return fileDataList;
+    }
+}
