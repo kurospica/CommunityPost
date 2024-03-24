@@ -1,0 +1,90 @@
+package model;
+
+import java.io.InputStream;
+import java.io.Serializable;
+
+public class Image implements Serializable {
+	private int id;
+	private String filename;
+	private InputStream fileContent;
+	private String contentType;
+	private String filepath;
+	private int postId;
+	private int mutterId;
+	private String userImageName;
+	
+	public Image(int id, String filename, InputStream fileContent, String contentType, String filepath, int postId, int mutterId) {
+        this.id = id;
+        this.filename = filename;
+        this.fileContent = fileContent;
+        this.contentType = contentType;
+        this.filepath = filepath;
+        this.postId = postId;
+        this.mutterId = mutterId;
+    }
+    
+    // デフォルトコンストラクタ
+    public Image() {}
+	
+	public Image(int id2, String fname, String base64Encoded, String contentType) {//getImageListLogic
+	    this.id = id2;
+	    this.filename = fname;
+	    this.filepath = base64Encoded;
+	    this.contentType = contentType;
+	  }
+
+	public Image(int id,String filename, InputStream fileContent) {
+		this.id=id;
+		this.filename = filename;
+		this.fileContent = fileContent;
+	}
+
+	public Image(String filename2, InputStream fileContent2, String contentType2) {
+		this.filename = filename2;
+		this.fileContent = fileContent2;
+		this.contentType = contentType2;
+	}
+
+	public Image(InputStream fileContent2, String contentType2) {
+		this.fileContent = fileContent2;
+		this.contentType = contentType2;
+	}
+
+	public int getId() {return id;}
+	public String getName() {return filename;}
+	public InputStream getFileContent() {return fileContent;}
+	public String getContentType() {return contentType;}
+	public String getFilePath() { return filepath;}
+
+	public int getPostId() {return postId;}
+	
+	public void setPostId(int postId) {//オブジェクトに関連付けられる外部テーブルの参照キーのため識別子として制約をみたすため必要
+        this.postId = postId;
+    }
+
+	public void setId(int id) {
+        this.id = id;
+    }
+
+	public void setMutterId(int mutterId) {
+		this.mutterId = mutterId;
+	}
+
+	public int getMutterId() {return mutterId;}
+	
+	public void setFileContent(InputStream fileContent) {
+        this.fileContent = fileContent;
+    }
+
+	public void setContentType(String contentType2) {
+		this.contentType = contentType2;
+		
+	}
+
+	public void setUserName(String userName) {
+		this.userImageName = userName;
+		
+	}
+	public String getUserName() {return userImageName;}
+
+}
