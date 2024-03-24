@@ -1,9 +1,5 @@
 # portfolio
 
-![PC用ポートフォリオ](../../assets/portfolio_web.png "portfolio_web")
-
-## このサイトについて
-
 - ポートフォリオサイト
 - リンク
   - [portfoliosite](https://kurospica.link/)
