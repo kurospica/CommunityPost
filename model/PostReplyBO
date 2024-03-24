@@ -1,0 +1,16 @@
+package model;
+
+import java.util.List;
+
+import dao.ReplyDAO;
+
+public class PostReplyBO {
+  public List<Reply> execute(Reply reply) { 
+    ReplyDAO dao = new ReplyDAO();
+    dao.insertReply(reply);
+    
+ // 挿入後、親つぶやきのIDに対するリプライのリストを取得して返す
+    List<Reply> replyList = dao.getRepliesByParentMutterId(reply.getParentMutterId());
+    return replyList;
+  }
+}
