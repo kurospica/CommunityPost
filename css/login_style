@@ -1,0 +1,140 @@
+/*トップ画面はここから↓*/
+body {
+  background-color: #FFFFF3;
+}
+
+form {
+  width: 400px;
+  padding: 40px 10px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%,-50%);
+  background-color: #000;
+  text-align: center;
+}
+
+form h1,form p {
+  color: white;
+  font-weight: 600;
+}
+
+form p {
+  font-size: 12px;
+}
+
+form input[type = "text"],form input[type = "password"] {
+  border: 0;
+  background: none;
+  display: block;
+  margin: 15px auto;
+  border: 2px solid #ff69b4;
+  padding: 15px 15px;
+  width: 200px;
+  height: 8px;
+  outline: none;
+  border-radius: 24px;
+  transition: 0.25s;
+  text-align: center;
+}
+
+form input[type = "text"]:focus,form input[type = "password"]:focus {
+  width: 280px;
+  background-color: #f0f8ff;
+}
+
+form input[type = "submit"]{
+  border: 0;
+  background: none;
+  display: block;
+  margin: 15px auto;
+  border: 2px solid #f0f8ff;
+  padding: 15px 15px;
+  width: 200px;
+  outline: none;
+  color: white;
+  border-radius: 24px;
+  transition: 0.25s;
+  text-align: center;
+  cursor: pointer;
+}
+
+form input[type = "submit"]:hover {
+  background-color: #ff69b4;
+  border: 2px solid #ff69b4;
+}
+
+/*トップ画面はここまで↑*/
+/*ユーザーページここから↓*/
+body {
+  background-color: #FFFFF3;
+}
+#user {
+
+	background-repeat: no-repeat,no-repeat;
+	background-position: left bottom,right bottom;
+	}
+
+/*#Oshisyoku {
+	max-width: 100%;
+}*/
+/*ユーザーページここまで↑*/
+/*登録ページここから↓*/
+
+/*登録ページここまで↑*/
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f5f5f5;
+}
+
+.container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.login_form_top h1 {
+    text-align: center;
+}
+
+.login_form_btm {
+    text-align: center;
+}
+
+.login_form_btm input[type="text"],
+.login_form_btm input[type="password"] {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    box-sizing: border-box;
+}
+
+.login_form_btm input[type="submit"] {
+    width: 100%;
+    padding: 10px;
+    margin-top: 10px;
+    box-sizing: border-box;
+}
+
+.login_form_btm a {
+    color: red;
+    display: block;
+    margin-top: 10px;
+    text-decoration: none;
+}
+
+@media only screen and (max-width: 600px) {
+    .container {
+        padding: 10px;
+    }
+    .login_form_btm input[type="text"],
+    .login_form_btm input[type="password"],
+    .login_form_btm input[type="submit"] {
+        width: 90%;
+        margin-left: 5%;
+        margin-right: 5%;
+    }
+}
