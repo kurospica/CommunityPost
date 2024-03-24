@@ -1,0 +1,98 @@
+package dao;
+
+import java.sql.Blob;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.Base64;
+import java.util.List;
+
+import model.FileDataList;
+
+public class PostListDAO {
+	private final static String JDBC_URL = "jdbc:h2:./database/MutterDatabase";
+    private final static String DB_USER = "sa";
+    private final static String DB_PASS = "";
+
+ // データを取得し統合するメソッド
+    public List<FileDataList> getDataFromMultipleTables() {
+    	//テキスト投稿用データベースと画像投稿用データベースをintegrated(統合)したリストを作成
+        List<FileDataList> integratedDataList = new ArrayList<>();
+        
+        // テーブルAからのデータを取得しリストに追加
+        List<FileDataList> mutterDataList = getDataFromMuttersTable();
+        integratedDataList.addAll(mutterDataList);       
+
+        return integratedDataList;
+    }
+    
+    private List<FileDataList> getDataFromMuttersTable() {
+        List<FileDataList> mutterDataList = new ArrayList<>();
+    
+
+        try {
+            Class.forName("org.h2.Driver");
+        } catch (ClassNotFoundException e) {
+            throw new IllegalStateException("JDBCドライバを読み込めませんでした", e);
+        }
+
+        try (Connection connection = DriverManager.getConnection(JDBC_URL, DB_USER, DB_PASS)) {
+            // テーブルAからデータを取得するSQLクエリを実行
+            String queryA = "SELECT * FROM (";
+            queryA += "SELECT m.mutter_id AS mutter_id, m.name AS name, m.text AS text, m.tweet_date AS tweet_date, f.name AS file_name, f.content AS content, f.content_type AS content_type, f.uploaded_at AS uploaded_at ";
+            queryA += "FROM MUTTERS m ";
+            queryA += "LEFT JOIN FILEPATHS f ON m.mutter_id = f.mutter_id ";
+            queryA += "UNION ";
+            queryA += "SELECT m.mutter_id AS mutter_id, f.name AS name, m.text AS text, m.tweet_date AS tweet_date, m.name AS file_name, f.content AS content, f.content_type AS content_type, f.uploaded_at AS uploaded_at ";
+            queryA += "FROM MUTTERS m  ";
+            queryA += "RIGHT JOIN FILEPATHS f ON m.mutter_id = f.mutter_id ";
+            queryA += ") AS result ORDER BY COALESCE(tweet_date, uploaded_at) DESC";
+
+            System.out.println("queryA:" + queryA);
+            try (PreparedStatement statementA = connection.prepareStatement(queryA);
+                 ResultSet resultSetA = statementA.executeQuery()) {
+                System.out.println("resultSetA:" + resultSetA);
+
+            	while (resultSetA.next()) {
+                    int mutterId        = resultSetA.getInt("mutter_id");
+            		System.out.println("mutter:" + mutterId);
+                    String mutterName       = resultSetA.getString("name");
+                    String mutterText       = resultSetA.getString("text");
+                    Timestamp timestamp     = resultSetA.getTimestamp("tweet_date");
+            		String fileContentType = resultSetA.getString("CONTENT_TYPE");
+                    Blob fileContent        = resultSetA.getBlob("content");
+                    byte[] imageData = null;
+                	String base64Encoded = "";
+                    if (fileContent != null) {
+                        try {
+                            imageData = fileContent.getBytes(1, (int) fileContent.length());
+                        } catch (SQLException e) {
+                            // エラーの場合の処理
+                            e.printStackTrace();
+                        }
+                    } else {
+                       // System.out.println("fileContentがnullです");
+                    }
+
+                    if (imageData != null) {
+                        base64Encoded = Base64.getEncoder().encodeToString(imageData);
+                        //filePathsDataList.add(new FileDataList(name,base64Encoded, fileContentType, timestamp2));
+                    } else {
+                        // imageDataがnullの場合の処理
+                    }
+                    mutterDataList.add(new FileDataList(mutterId, mutterName, mutterText, timestamp, fileContentType, base64Encoded));
+                }
+            }
+        } catch (SQLException e) {
+            throw new IllegalStateException("データベースからのデータの取得に失敗しました", e);
+        }
+        System.out.println("tableA:" + mutterDataList);
+        return mutterDataList;
+    }
+}
+           
+            
