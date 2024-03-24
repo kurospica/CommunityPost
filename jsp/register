@@ -1,0 +1,27 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<link rel="stylesheet" href="login_style.css">
+	<title>アカウント登録</title>
+</head>
+<body id="register">
+	<form  name="login_form" action="AccountRegister" method="post">
+		<div class="login_form_top">
+			<h1><img src="images/login_logo.png" alt="推し活応援"></h1>
+			<p>登録情報を全て入力後、登録を押してください。<br>
+			<input type="radio" name="role" value="1">管理者で登録する
+			<input type="radio" name="role" value="2" checked>ユーザーで登録する
+			</p>
+    	</div>
+    	<div class="login_form_btm">
+			<input type="text" name="name" placeholder="Name" required>
+			<input type="text" name="loginId" placeholder="LOGIN ID" required>
+			<input type="password" name="pass" placeholder="Password" required>
+			<input type="submit" name="botton" value="登録">
+		</div>
+	</form>
+</body>
+</html>
