@@ -1,0 +1,57 @@
+package model;
+
+import java.io.InputStream;
+
+import dao.ImageDAO;
+import dao.MuttersDAO;
+
+public class MutterBO {//条件分岐にて各処理を担当するBO
+    private MuttersDAO muttersDAO;
+    private ImageDAO imageDAO;
+    
+    public MutterBO() {
+        this.muttersDAO = new MuttersDAO();
+        this.imageDAO = new ImageDAO();
+    }
+    
+    public boolean postTextAndImage(String userName, String text, InputStream fileContent, String contentType) {//テキストと画像
+        Mutter mutter = new Mutter(userName, text);
+        boolean mutterCreated = muttersDAO.createMutter(mutter);
+        
+        if (!mutterCreated && fileContent == null) {
+            return false;
+        }
+     
+        if (fileContent != null) {
+        int mutterId = muttersDAO.getLastInsertedMutterId(); // 最新のつぶやきidを取得
+       // System.out.println("mutterId"+mutterId);
+        Image image = new Image(fileContent, contentType);
+        image.setUserName(userName);
+        image.setMutterId(mutterId);
+        boolean imageUploaded = imageDAO.uploadImage(image);
+        
+        if (!imageUploaded) {
+            return false;
+        }
+        }
+        return true;
+    }
+    
+    
+    public boolean postText(String userName, String text) {//テキストのみの投稿
+        Mutter mutter = new Mutter(userName, text);
+        return muttersDAO.createMutter(mutter);
+    }
+    
+    public boolean postImage(String userName, InputStream fileContent, String contentType) {//画像のみの投稿
+    	if (fileContent == null) {
+            return false;
+        }
+    	
+        Image image = new Image();
+        image.setUserName(userName);
+        image.setFileContent(fileContent);
+        image.setContentType(contentType);
+        return imageDAO.uploadImage(image);
+    }
+}
