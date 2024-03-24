@@ -1,0 +1,41 @@
+package dao;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+
+public class AccountDeleteDAO {
+    private Connection connection;
+
+    public AccountDeleteDAO(Connection connection) {
+        this.connection = connection;
+    }
+
+    public boolean deleteAccount(String loginId) {
+        boolean success = false;
+        PreparedStatement statement = null;
+
+        try {
+            String query = "DELETE FROM ACCOUNTS WHERE LOGINID = ?";
+            statement = connection.prepareStatement(query);
+            statement.setString(1, loginId);
+
+            int rowsAffected = statement.executeUpdate();
+            if (rowsAffected > 0) {
+                success = true;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (statement != null) {
+                    statement.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return success;
+    }
+}
