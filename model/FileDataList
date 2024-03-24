@@ -1,0 +1,117 @@
+package model;
+
+import java.sql.Timestamp;
+
+
+public class FileDataList {
+	private int mutterId;
+    private String text;
+    private String name;
+    private String content;
+    private String contentType;
+	private Timestamp posttimestamp;
+	private Timestamp uploadtimestamp;
+	private int imageId;
+
+	
+
+    public FileDataList(int mutterId, String mutterName, String mutterText, Timestamp timestamp, String contentType, String base64Encoded2) {
+    	this.mutterId = mutterId;
+        this.name = mutterName;
+        this.text = mutterText;
+        this.posttimestamp = timestamp;
+        this.contentType = contentType;
+        this.content = base64Encoded2;
+    }
+
+    public FileDataList(String name,String base64Encoded2, String contentType, Timestamp timestamp) {
+    	this.name = name;
+        this.content = base64Encoded2;
+        this.contentType = contentType;
+        this.uploadtimestamp = timestamp;
+    }
+
+	public FileDataList(String name2, String text2, Timestamp postedAt, Timestamp uploadedAt) {
+		this.posttimestamp = postedAt;
+        this.name = name2;
+        this.text = text2;
+       // this.content = base64Encoded;
+       // this.contentType = contentType;
+        this.uploadtimestamp = uploadedAt;
+    }
+
+	public FileDataList(int imageId2, int mutterId2, String content2, String contentType2, Timestamp uploadedAt) {
+		this.imageId = imageId2;
+		this.mutterId = mutterId2;
+		this.content = content2;
+		this.contentType = contentType2;
+		this.uploadtimestamp = uploadedAt;
+	}
+
+	// ゲッターとセッター
+    public String getText() {
+        return text;
+    }
+
+    public void setText(String text) {
+        this.text = text;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+
+	public String getContentType() {
+		return contentType;
+	}
+
+	public void setContentType(String contentType) {
+		this.contentType = contentType;
+	}
+
+	public Timestamp getTimestamp() {
+		return this.posttimestamp;
+	}
+
+	public void setTimestamp(Timestamp timestamp) {
+		this.posttimestamp = timestamp;
+	}
+
+	public Timestamp getUploadtimestamp() {
+		return this.uploadtimestamp;
+	}
+
+	public void setUploadtimestamp(Timestamp uploadtimestamp) {
+		this.uploadtimestamp = uploadtimestamp;
+	}
+
+	public int getMutterId() {
+		return mutterId;
+	}
+
+	public void setMutterId(int mutterId) {
+		this.mutterId = mutterId;
+	}
+
+	public int getImageId() {
+		return imageId;
+	}
+
+	public void setImageId(int imageId) {
+		this.imageId = imageId;
+	}
+
+}
+
