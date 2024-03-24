@@ -3,6 +3,7 @@
 - ポートフォリオサイト
 - リンク
   - [portfoliosite](https://kurospica.link/)
+  - [ComnityPost](http://kurospica.link:8080/CommunityPost/)
 
 ## ローカル開発
 
