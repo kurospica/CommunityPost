@@ -1,0 +1,102 @@
+package servlet;
+
+import java.io.IOException;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import dao.MuttersDAO;
+import dao.MuttersDeleteDAO;
+import model.Mutter;
+
+
+@WebServlet("/MutterDelete")
+public class MutterDelete extends HttpServlet {
+       		   	
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        // フォームから送信されたデータを取得
+        String MUTTER_ID = request.getParameter("MUTTER_ID");
+
+        // データベース接続に使用する情報
+    	final String JDBC_URL = "jdbc:h2:./database/MutterDatabase";
+        final String DB_USER = "sa";
+        final String DB_PASS = "";
+
+        Connection connection = null;
+
+        try {
+            // データベースに接続
+            Class.forName("org.h2.Driver");
+            connection = DriverManager.getConnection(JDBC_URL, DB_USER, DB_PASS);
+
+            // DAOを使用してデータベースの削除を実行
+            MuttersDeleteDAO dao = new MuttersDeleteDAO(connection);
+            boolean success = dao.deleteMutter(MUTTER_ID);
+            
+            if (success) {
+                // 削除成功時の処理
+                request.setAttribute("message", "つぶやきが正常に削除されました。");
+            } else {
+                // 削除失敗時の処理
+                request.setAttribute("message", "つぶやきの削除に失敗しました。");
+            }
+        } catch (SQLException | ClassNotFoundException e) {
+            e.printStackTrace();
+            request.setAttribute("message", "エラーが発生しました。");
+        } finally {
+            // リソースの解放
+            try {
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+       List<Mutter> dataList2 = new ArrayList<>();
+        
+        // データベースから値を取得し、ビーンに格納する処理
+        try {
+            Connection conn = DriverManager.getConnection("jdbc:h2:./database/MutterDatabase", "sa", "");
+            PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM MUTTERS");
+            ResultSet rs = pstmt.executeQuery();
+            
+            while (rs.next()) {
+                Mutter mutter = new Mutter();
+                mutter.setId(rs.getInt("ID"));
+                mutter.setUserName(rs.getString("NAME"));
+                mutter.setText(rs.getString("TEXT"));                
+                
+                dataList2.add(mutter);
+            }
+            
+            rs.close();
+            pstmt.close();
+            conn.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        
+        MuttersDAO dao = new MuttersDAO();
+        List<Mutter> dataList = dao.findAll();
+        request.setAttribute("dataList", dataList);
+        
+        // 取得したデータをリクエスト属性に設定
+        request.setAttribute("dataList", dataList);
+        
+        // 元のJSPページにリダイレクト
+        RequestDispatcher dispatcher = request.getRequestDispatcher("WEB-INF/jsp/adminMutter.jsp");
+        dispatcher.forward(request, response);
+    }
+}
