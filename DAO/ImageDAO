@@ -81,19 +81,4 @@ public class ImageDAO {
   }
 }
 
-/*public static void saveFile(String filename, InputStream fileContent, String contentType) {
-	try (Connection conn = DriverManager.getConnection(JDBC_URL, DB_USER, DB_PASS)) {
-        String sql = "INSERT INTO Files (filename, content, content_type) VALUES (?, ?, ?)";
-	
-        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setString(1, filename);
-            stmt.setBlob(2, fileContent);
-            stmt.setString(3, contentType);
-            stmt.executeUpdate();
-        
-        }
-    } catch (SQLException e) {
-        e.printStackTrace();
-    
-}*/
 
