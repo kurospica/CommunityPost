@@ -1,0 +1,64 @@
+package dao;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+
+import model.Mutter;
+
+public class MuttersDAO {
+  // データベース接続に使用する情報
+  private final String JDBC_URL = "jdbc:h2:./database/MutterDatabase";
+  private final String DB_USER = "sa";
+  private final String DB_PASS = "";
+  private final static String INSERT_MUTTER_SQL = "INSERT INTO MUTTERS (name, text, tweet_date) VALUES (?, ?, ?)";
+  private final static String GET_LAST_INSERTED_ID_SQL = "SELECT MAX(mutter_id) AS mutter_id FROM MUTTERS";
+  
+  public boolean createMutter(Mutter mutter) {
+
+    // データベース接続
+      try (Connection conn = DriverManager.getConnection(JDBC_URL, DB_USER, DB_PASS);
+           PreparedStatement pstmt = conn.prepareStatement(INSERT_MUTTER_SQL)) {
+
+          pstmt.setString(1, mutter.getUserName());
+          pstmt.setString(2, mutter.getText());
+          pstmt.setTimestamp(3, Timestamp.valueOf(LocalDateTime.now()));
+
+          int affectedRows = pstmt.executeUpdate();
+          
+       // 自動生成された主キーの取得
+          try (ResultSet generatedKeys = pstmt.getGeneratedKeys()) {
+              if (generatedKeys.next()) {
+                  mutter.setId(generatedKeys.getInt(1)); // 自動生成されたIDをセットする
+              }
+          }
+          
+          return affectedRows > 0;
+      } catch (SQLException e) {
+          e.printStackTrace();
+          return false;
+      }
+  }
+
+  public int getLastInsertedMutterId() {
+      try (Connection conn = DriverManager.getConnection(JDBC_URL, DB_USER, DB_PASS);
+           PreparedStatement pstmt = conn.prepareStatement(GET_LAST_INSERTED_ID_SQL);
+           ResultSet rs = pstmt.executeQuery()) {
+
+          if (rs.next()) {
+        	  System.out.println("MUTTER_ID"+rs.getInt("MUTTER_ID"));
+              return rs.getInt("MUTTER_ID");
+          }
+      } catch (SQLException e) {
+          e.printStackTrace();
+      }
+      return -1;
+  }
+}
+
