@@ -1,0 +1,51 @@
+package dao;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+
+import model.AccountBeans;
+
+public class AccountRegisterDAO {
+    // データベース接続に使用する情報
+    final String DB_USER = "sa";
+    final String DB_PASS = "";
+    final String JDBC_URL = "jdbc:h2:./database/MutterDatabase";
+    
+    public  AccountRegisterDAO(AccountBeans ab) {
+    	 // JDBCドライバを読み込む
+        try {
+            Class.forName("org.h2.Driver");
+        } catch (ClassNotFoundException e) {
+            throw new IllegalStateException("JDBCドライバを読み込めませんでした");
+        }
+        try (Connection con = DriverManager.getConnection(JDBC_URL, DB_USER, DB_PASS)) {
+            
+            String sql = "INSERT INTO accounts (loginId, pass, name, roleId) VALUES (?, ?, ?, ?)";
+            PreparedStatement ps= con.prepareStatement(sql);
+
+            System.out.println("接続OK");
+            ps.setString(1, ab.getLoginId());
+            ps.setString(2, ab.getPass());
+            ps.setString(3, ab.getName());
+            ps.setInt(4, ab.getRole());
+
+            int r = ps.executeUpdate();
+
+            if(r != 0) {
+                System.out.println("新規登録成功！");
+            } else {
+                System.out.println("新規登録失敗( ﾉД`)ｼｸｼｸ…");
+            }
+            System.out.println("書き込みOK");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+	public void create() {
+		// TODO 自動生成されたメソッド・スタブ
+		
+	}
+}
