@@ -6,7 +6,7 @@
 
 - ポートフォリオサイト
 - リンク
-  - [kamimi-portfolio](https://kurospica.link/)
+  - [portfolio](https://kurospica.link/)
 
 ## ローカル開発
 
