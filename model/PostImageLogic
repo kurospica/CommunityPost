@@ -1,0 +1,12 @@
+package model;
+
+import java.io.FileNotFoundException;
+
+import dao.ImageDAO;
+
+public class PostImageLogic {
+  public void execute(Image image) throws FileNotFoundException, ClassNotFoundException { 
+    ImageDAO dao = new ImageDAO();
+    dao.uploadImage(image);
+  }
+}
