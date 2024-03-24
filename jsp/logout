@@ -1,0 +1,27 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="styleForLogout.css">
+    <meta charset="UTF-8">
+    <title>投稿サイト</title>
+</head>
+<body>
+<header id="top">
+    <h1>LOGOUT</h1>
+</header>
+<div id="EH">
+    <div id="comment">
+        <p>Please push the following button</p>
+        <form action="index.jsp" method="post">
+            <button type="submit" action="index.jsp">トップへ</button>
+        </form>
+    </div>
+    <div id="image">
+        <img src="images/logout_logo.png" alt="Logout completed">
+    </div>
+</div>
+</body>
+</html>
